@@ -1,4 +1,8 @@
 AWSTemplateFormatVersion: '2010-09-09'
+Outputs:
+  InstanceIp:
+    Value: !GetAtt Instance.PublicIp
+
 Resources:
   VPC:
     Type: AWS::EC2::VPC
