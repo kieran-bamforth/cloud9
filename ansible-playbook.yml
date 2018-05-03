@@ -2,18 +2,49 @@
 - hosts: cloud9
   user: ec2-user
   tasks:
+    - name: Install packages
+      yum:
+        name: "{{ item }}"
+        state: present
+      loop:
+        - gcc
+        - glibc-static
+        - "@Development Tools"
+      become: yes
+
     - name: Import Nodesource RPM key.
       rpm_key:
         key: http://rpm.nodesource.com/pub/el/NODESOURCE-GPG-SIGNING-KEY-EL
         state: present
       become: yes
+
     - name: Add Nodesource repositories for Node.js.
       yum:
         name: "https://rpm.nodesource.com/pub_6.x/el/6/x86_64/nodesource-release-el6-1.noarch.rpm"
         state: present
       become: yes
+
     - name: Install Node.js.
       yum:
         name: nodejs
         state: present
       become: yes
+
+    - name: Create cloud9 group.
+      group:
+        name: cloud9
+      become: yes
+
+    - name: Create cloud9 user.
+      user:
+        name: cloud9
+        group: cloud9
+        home: /home/cloud9
+      become: yes
+
+    - name: Authorize AWS Cloud9.
+      authorized_key:
+        key: 'ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAACAQDJonczmFiF1Bgil/8EO2K/bwNM1X/4JqFyl0gM+uNTpMmlb5LCREISP9GQ7/x+o3ZP5/OBwb1Jyfrua5yT0kwmqLaD90nlO4UVn37VviFnf7hai4y8dRfyfol3LAHsAlaiAS9VuSLkOiwD87luUXNkWP2Ni4KpnF3Md37lPfSLhn2r1qmxZOkJJN0NBClNihSq4wUk33OSjQUbzYOkJs5kmKMHip+9Bmh3tA9KYmOOpl1HB1nAZQsRnS3bJVyqOnDypgYXvsjTf+qQm1E4G6elgfSIOfmnupacSbWAo+aDFerKMgEKvFpStcoTiHHV27h83QIsHtD+asHaSkIdTHn5Sk+bra8L7I+izoItzUpUx3YF3aZWgbd+nE41D72qL0UvK5E5qXQBANBSSuOF7cl1BEexObmUd3chzjKPdohNF/EDHyhknuT+VGutG0gsocX9yhbyKGohJGL3uS/nJnYoSdrdGxZUDcyu1VsMnHi43BrAR9CjCS15CNCzG2aP7nVucB49hl6UtCXW6KDxq3g131WG7uHVGtRSvyXoLPRkQkyvHlQ1RrYEuUfkBduvuYtCVaUWSibDfQwrsJjc63WdDoF430V8acPDWDYH/ZU5g+irx2xvPMjXrK4KWxb/cB1+thCrxS02odghwjzpTpnTVHW1ZfMJdriQqUKqf0PseQ== Administrator+855277617897@cloud9.amazon.com'
+        user: cloud9
+      become: yes
+      become_user: cloud9
