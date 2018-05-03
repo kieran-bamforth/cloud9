@@ -13,6 +13,13 @@
         - docker
       become: yes
 
+    - name: Enable Docker.
+      service:
+        name: docker
+        enabled: yes
+        state: started
+      become: yes
+
     - name: Import Nodesource RPM key.
       rpm_key:
         key: http://rpm.nodesource.com/pub/el/NODESOURCE-GPG-SIGNING-KEY-EL
@@ -39,7 +46,9 @@
     - name: Create cloud9 user.
       user:
         name: cloud9
-        group: cloud9
+        groups:
+          - cloud9
+          - docker
         home: /home/cloud9
       become: yes
 
