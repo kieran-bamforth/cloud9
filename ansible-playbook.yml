@@ -2,7 +2,7 @@
 - hosts: cloud9
   user: ec2-user
   tasks:
-    - name: Install packages
+    - name: Install packages.
       yum:
         name: "{{ item }}"
         state: present
@@ -10,6 +10,7 @@
         - gcc
         - glibc-static
         - "@Development Tools"
+        - docker
       become: yes
 
     - name: Import Nodesource RPM key.
@@ -40,6 +41,25 @@
         name: cloud9
         group: cloud9
         home: /home/cloud9
+      become: yes
+
+    - name: Format block device.
+      filesystem:
+        fstype: ext4
+        dev: /dev/xvdf
+        force: yes
+      tags:
+        - mount_block_device
+      become: yes
+
+    - name: Mount block device onto mountpoint.
+      mount:
+        path: /home/cloud9
+        src: /dev/xvdf
+        fstype: ext4
+        state: mounted
+      tags:
+        - mount_block_device
       become: yes
 
     - name: Authorize AWS Cloud9.
