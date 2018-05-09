@@ -13,6 +13,15 @@
         - docker
       become: yes
 
+    - name: Install files.
+      copy:
+        src: ./etc/docker/daemon.json
+        dest: /etc/docker/daemon.json
+        owner: root
+        group: root
+        mode: 0755
+      become: yes
+
     - name: Enable Docker.
       service:
         name: docker
