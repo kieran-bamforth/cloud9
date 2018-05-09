@@ -98,3 +98,29 @@ Resources:
         - 'arn:aws:iam::aws:policy/AWSLambdaFullAccess'
         - 'arn:aws:iam::aws:policy/AmazonAPIGatewayAdministrator'
         - 'arn:aws:iam::aws:policy/AmazonAPIGatewayInvokeFullAccess'
+      Policies:
+        - PolicyName: 'AWSCloud9LambdaGroupAccess'
+          PolicyDocument:
+            Version: "2012-10-17"
+            Statement:
+              - Effect: "Allow"
+                Action:
+                  - "cloudformation:CreateChangeSet"
+                  - "cloudformation:CreateStack"
+                  - "cloudformation:DescribeChangeSet"
+                  - "cloudformation:DescribeStackEvents"
+                  - "cloudformation:DescribeStacks"
+                  - "cloudformation:ExecuteChangeSet"
+                  - "cloudformation:ListStackResources"
+                  - "cloudformation:UpdateStack"
+                  - "iam:AttachRolePolicy"
+                  - "iam:DetachRolePolicy"
+                  - "iam:GetRole"
+                  - "iam:GetUser"
+                  - "iam:PassRole"
+                Resource: "*"
+              - Effect: "Allow"
+                Action:
+                  - "iam:CreateRole"
+                  - "iam:DeleteRole"
+                Resource: !Join [ "", [ "arn:aws:iam::", !Ref "AWS::AccountId", ":role/cloud9-*" ] ]
