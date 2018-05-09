@@ -45,7 +45,7 @@ Resources:
   SecurityGroup:
     Type: AWS::EC2::SecurityGroup
     Properties:
-      GroupDescription: "Security group for Cloud9"
+      GroupDescription: 'Security group for Cloud9'
       SecurityGroupIngress:
         - IpProtocol: tcp
           FromPort: '22'
@@ -67,8 +67,8 @@ Resources:
       InstanceType: t2.micro
       KeyName: kieranbamforth
       NetworkInterfaces:
-        - AssociatePublicIpAddress: "true"
-          DeviceIndex: "0"
+        - AssociatePublicIpAddress: 'true'
+          DeviceIndex: '0'
           GroupSet:
             - !Ref SecurityGroup
           SubnetId: !Ref Subnet
@@ -86,20 +86,15 @@ Resources:
     Type: AWS::IAM::Role
     Properties:
       AssumeRolePolicyDocument:
-        Version: "2012-10-17"
+        Version: '2012-10-17'
         Statement:
-          - Effect: "Allow"
+          - Effect: 'Allow'
             Principal:
               Service:
-                - "ec2.amazonaws.com"
+                - 'ec2.amazonaws.com'
             Action:
-              - "sts:AssumeRole"
-      Policies:
-        - PolicyName: Lambda
-          PolicyDocument:
-            Version: "2012-10-17"
-            Statement:
-              - Effect: "Allow"
-                Action:
-                  - "lambda:ListFunctions"
-                Resource: "*"
+              - 'sts:AssumeRole'
+      ManagedPolicyArns:
+        - 'arn:aws:iam::aws:policy/AWSLambdaFullAccess'
+        - 'arn:aws:iam::aws:policy/AmazonAPIGatewayAdministrator'
+        - 'arn:aws:iam::aws:policy/AmazonAPIGatewayInvokeFullAccess'
