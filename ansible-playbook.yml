@@ -19,7 +19,7 @@
         dest: /etc/docker/daemon.json
         owner: root
         group: root
-        mode: 0755
+        mode: 0600
       become: yes
 
     - name: Enable Docker.
@@ -59,6 +59,15 @@
           - cloud9
           - docker
         home: /home/cloud9
+      become: yes
+
+    - name: Make cloud9 user a sudoer.
+      copy:
+        src: ./etc/sudoers.d/cloud9
+        dest: /etc/sudoers.d/cloud9
+        owner: root
+        group: root
+        mode: 0640
       become: yes
 
     - name: Format block device.
